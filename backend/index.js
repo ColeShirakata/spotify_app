@@ -34,12 +34,14 @@ app.get('/callback', (req, res) => {
     const state = req.query.state || null
 
     if (state === null) {
+        console.log("Testing 1")
         res.redirect('/#' + 
             querystring.stringify({
                 error: 'state_mismatch'
             })
         )
     } else {
+        console.log('Testing 2')
         const authOptions = {
             url: 'https://accounts.spotify.com/api/token',
             method: 'post',
@@ -56,7 +58,8 @@ app.get('/callback', (req, res) => {
         axios(authOptions)
             .then(response => {
                 access_token = response.data.access_token
-                res.redirect('/')
+                console.log(access_token)
+                res.redirect('http://localhost:3000?access_token=' + access_token)
             })
             .catch(error => {
                 console.log(error)
