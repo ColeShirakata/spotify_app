@@ -1,8 +1,8 @@
-const Login = () => {
+const Login = ({ onButtonClick }) => {
     return (
         <div>
             <h1>Spotify Dashboard</h1>
-            <button>Login with Spotify</button>
+            <button onClick={onButtonClick}>Login with Spotify</button>
         </div>
     )
 }
