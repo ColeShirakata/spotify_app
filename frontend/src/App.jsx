@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import Login from './components/Login'
 import Dashboard from './components/Dashboard'
@@ -6,17 +6,24 @@ import Dashboard from './components/Dashboard'
 import './App.css'
 
 function App() {
-  const [toggle, setToggle] = useState(false)
+  const [authenticated, setAuthenticated] = useState(false)
+  const [token, setToken] = useState('')
 
-  const handleButtonClick = () => {
-    setToggle(true)
-  }
+  useEffect(() => {
+    const urlParams= new URLSearchParams(window.location.search)
+    const accessToken = urlParams.get('access_token')
+
+    if (accessToken) {
+      setToken(accessToken)
+      setAuthenticated(true)
+    }
+  })
 
   // Toggles from login to dashboard if logged in
   return (
     <div>
       
-      {toggle ? <Dashboard /> : <Login onButtonClick={handleButtonClick}/>}
+      {authenticated ? <Dashboard token={token}/> : <Login />}
       
     </div>
   )

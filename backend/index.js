@@ -11,7 +11,7 @@ const redirect_uri = 'http://localhost:3000/callback'
 const client_secret = '2964822531ef48eea6ca63dafe71f0fa'
 
 app.get('/', (req, res) => {
-    res.send('Success')
+    res.redirect('Success')
 })
 
 app.get('/login', (req, res) => {
@@ -34,14 +34,12 @@ app.get('/callback', (req, res) => {
     const state = req.query.state || null
 
     if (state === null) {
-        console.log("Testing 1")
         res.redirect('/#' + 
             querystring.stringify({
                 error: 'state_mismatch'
             })
         )
     } else {
-        console.log('Testing 2')
         const authOptions = {
             url: 'https://accounts.spotify.com/api/token',
             method: 'post',
@@ -58,8 +56,12 @@ app.get('/callback', (req, res) => {
         axios(authOptions)
             .then(response => {
                 access_token = response.data.access_token
-                console.log(access_token)
-                res.redirect('http://localhost:3000?access_token=' + access_token)
+                
+                if (access_token) {
+                    res.redirect('http://localhost:5173?access_token=' + access_token)
+                } else {
+                    res.status(500).send('Access token not found')
+                }
             })
             .catch(error => {
                 console.log(error)
@@ -68,7 +70,11 @@ app.get('/callback', (req, res) => {
     }
 })
 
+app.get('/topSongs', () => {
+
+})
+
 const PORT = 3000
-app.listen(PORT, '127.0.0.1', () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`App listening on port ${PORT}`)
 })

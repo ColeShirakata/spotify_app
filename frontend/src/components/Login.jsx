@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const Login = () => {
     const handleLogin = async () => {
-        const response = await axios.get('http://localhost:3000/login')
+        const response = await axios.get('http://192.168.12.254:3000/login')
         window.location.href = response.data
     }
 
